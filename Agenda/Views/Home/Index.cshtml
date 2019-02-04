@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Contato>
+
+@{
+    ViewData["Title"] = "Agenda";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="display-4">Contatos</h1>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-4 offset-md-8">
+            <form>
+                <input id="txtFilter" type="text" name="p_Filter">
+                <input type="submit" value="Pesquisar" placeholder="&#f2f1;" />
+            </form>
+
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+
+            <table class="table text-center">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr onclick="location.href = '@(Url.Action("DetalheContato", "Home", new { p_IdContato = item.Identificador }))'">
+                        <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

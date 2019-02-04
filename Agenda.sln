@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agenda", "Agenda\Agenda.csproj", "{2FF59B88-2B92-4355-998A-31B2F85048DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgendaTeste", "AgendaTeste\AgendaTeste.csproj", "{3910CECB-61F6-490A-A578-08F82381693D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FF59B88-2B92-4355-998A-31B2F85048DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FF59B88-2B92-4355-998A-31B2F85048DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FF59B88-2B92-4355-998A-31B2F85048DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FF59B88-2B92-4355-998A-31B2F85048DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3910CECB-61F6-490A-A578-08F82381693D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3910CECB-61F6-490A-A578-08F82381693D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3910CECB-61F6-490A-A578-08F82381693D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3910CECB-61F6-490A-A578-08F82381693D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0773C3FD-5067-4F51-82B8-ED22514C1311}
+	EndGlobalSection
+EndGlobal
