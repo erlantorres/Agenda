@@ -28,6 +28,17 @@ namespace Agenda.Controllers
             return View(contato);
         }
 
+        public IActionResult AlterarContato(int p_IdContato)
+        {
+            Contato contato = _agendaService.ObterContatoPorId(p_IdContato);
+            return View(contato);
+        }
+
+        public IActionResult IncluirContato()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
