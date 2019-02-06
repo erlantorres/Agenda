@@ -31,11 +31,6 @@ public void AddDadoAdicional(object p_Tipo, object p_Classificacao, object p_Val
     <hr />
     <div class="row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @*<div class="form-group">
-                <label asp-for="Identificador" class="control-label"></label>
-                <input asp-for="Identificador" class="form-control" />
-                <span asp-validation-for="Identificador" class="text-danger"></span>
-            </div>*@
     </div>
     <div class="row">
         <div class="form-group col-12 col-md-6">
@@ -117,7 +112,7 @@ public void AddDadoAdicional(object p_Tipo, object p_Classificacao, object p_Val
                    id="btnInserirContato"
                    class="btn form-control btn-light"
                    value="Inserir Contato"
-                   onclick="InserirDadoAdicional()" />
+                   onclick="InserirDadoAdicional();" />
         </div>
     </div>
     <br />
@@ -143,7 +138,7 @@ public void AddDadoAdicional(object p_Tipo, object p_Classificacao, object p_Val
                             <input type="button"
                                    value="Excluir"
                                    class="btn btn-light"
-                                   onclick="location.href='@(Url.Action("ExcluirContato", "Home"))'" />
+                                   onclick="location.href='@(Url.Action("ExcluirDadoAdicional", "Home"))'" />
                         </td>
                     </tr>
 
@@ -162,16 +157,20 @@ public void AddDadoAdicional(object p_Tipo, object p_Classificacao, object p_Val
                    onclick="location.href='@(Url.Action("DetalheContato", "Home", new { p_IdContato = Model.Identificador }))'" />
         </div>
     </div>
+
 </form>
 
 @section scripts{
-    <script>
+    <script type="text/javascript">
         $(document).ready(function () {
-            InserirDadoAdicional()
-            {
-                var tipo = '';
-                var classificacao = '';
+            function InserirDadoAdicional() {
+                var tipo = $("#sctTipo").val();;
+                var classificacao = $("#sctClassificacao").val();
                 var valor = $('#txtValor').val();
+
+                console.log(tipo);
+                console.log(classificacao);
+                console.log(valor);
 
                 @*@AddDadoAdicional(tipo, classificacao, valor);*@
             }
