@@ -1,78 +1,68 @@
 ﻿@model Agenda.Models.Contato
-
 @{
     ViewData["Title"] = "Detalhe Contato";
 }
 
-@*<h1>Detalhe Contato</h1>*@
-
-<div>
-    <h4>Contato</h4>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 text-center">
+            <h2 class="display-4">Detalhe Contato</h2>
+        </div>
+    </div>
+    <br />
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Identificador)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Identificador)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Empresa)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Empresa)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Cep)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Cep)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Logradouro)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Logradouro)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Numero)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Numero)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Complemento)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Complemento)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Bairro)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Bairro)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Cidade)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Cidade)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Uf)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Uf)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Editar", "AlterarContato", "Home", new { p_IdContato = Model.Identificador }) |
-    <a asp-action="Index">Voltar</a>
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <label for="divNome"><b>Nome</b></label>
+            <div id="divNome">
+                @Html.DisplayFor(model => model.Nome)
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <label for="divEmpresa"><b>Empresa</b></label>
+            <div id="divEmpresa">
+                @Html.DisplayFor(model => model.Empresa)
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label for="divEndereco"><b>Endereço</b></label>
+            <div id="divEndereco">
+                @Html.DisplayFor(model => model.Logradouro) -
+                @Html.DisplayFor(model => model.Numero),
+                @Html.DisplayFor(model => model.Complemento) -
+                @Html.DisplayFor(model => model.Bairro),
+                @Html.DisplayFor(model => model.Cidade) -
+                @Html.DisplayFor(model => model.Uf),
+                @Html.DisplayFor(model => model.Cep)
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        @{
+            foreach (var dadoAdicional in Model.DadosAdicionais)
+            {
+                <div class="col-12 col-md-4" style="padding-top:10px;">
+                    <label for="divDescricao"><b>@Html.DisplayFor(item => dadoAdicional.ClassificacaoDado.Nome)</b></label>
+                    <div id="divDescricao">
+                        @Html.DisplayFor(item => dadoAdicional.Valor)
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <br />
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-2 offset-10">
+            <input type="button"
+                   class="btn btn-light"
+                   value="Editar"
+                   onclick="location.href='@(Url.Action("AlterarContato", "Home", new { p_IdContato = Model.Identificador }))'" />
+            <input type="button"
+                   class="btn btn-light"
+                   value="Voltar"
+                   onclick="location.href='@(Url.Action("Index", "Home"))'" />
+        </div>
+    </div>
 </div>

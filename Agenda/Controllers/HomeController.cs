@@ -1,19 +1,18 @@
 ﻿using Agenda.Models;
+using Agenda.Models.DTO;
 using Agenda.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Agenda.Controllers
 {
     public class HomeController : Controller
     {
-        private AgendaService _agendaService;
-
+        private AgendaService _agendaService = new AgendaService();
         public HomeController()
         {
-            _agendaService = new AgendaService();
+            ViewBag.AgendaService = _agendaService;
         }
 
         public IActionResult Index(string p_Filter)
@@ -34,10 +33,63 @@ namespace Agenda.Controllers
             return View(contato);
         }
 
+        [HttpPost]
+        public IActionResult AlterarContato(Contato p_Contato)
+        {
+            RetornoTO retorno;
+
+            if (ModelState.IsValid)
+            {
+                retorno = _agendaService.AlterarContato(p_Contato);
+
+                if (retorno.Sucesso)
+                {
+                    return RedirectToAction("DetalheContato", new { p_IdContato = p_Contato.Identificador });
+                }
+            }
+
+            return RedirectToAction("Error");
+        }
+
         public IActionResult IncluirContato()
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult IncluirContato(Contato p_Contato)
+        {
+            RetornoTO retorno;
+
+            if (ModelState.IsValid)
+            {
+                retorno = _agendaService.IncluirContato(p_Contato);
+                if (retorno.Sucesso)
+                {
+                    return RedirectToAction("Index");
+
+                }
+            }
+
+            return RedirectToAction("Error");
+        }
+        
+        public IActionResult ExcluirContato(int p_IdContato)
+        {
+            RetornoTO ret = _agendaService.ExcluirContato(p_IdContato);
+            if (ret.Sucesso)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Error");
+        }
+
+        //public JsonResult DadosAdicionais(string p_Tipo, string p_Classificacao, string p_Valor) {
+
+
+        //    return 
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

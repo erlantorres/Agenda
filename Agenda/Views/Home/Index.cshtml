@@ -1,41 +1,71 @@
 ﻿@model IEnumerable<Contato>
-
 @{
     ViewData["Title"] = "Agenda";
 }
-
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-12 text-center">
-            <h1 class="display-4">Contatos</h1>
+            <h2 class="display-4">Contatos</h2>
         </div>
     </div>
 
-
     <div class="row">
-        <div class="col-md-4 offset-md-8">
-            <form>
-                <input id="txtFilter" type="text" name="p_Filter">
-                <input type="submit" value="Pesquisar" placeholder="&#f2f1;" />
-            </form>
+        <div class="col-12 col-md-1 justify-content-sm-start">
+            <input type="button"
+                   class="btn btn-light"
+                   value="Incluir"
+                   onclick="location.href='@(Url.Action("IncluirContato", "Home"))'" />
+        </div>
+        <div class="col-12 col-md-5 offset-md-6">
+            <form class="form-inline justify-content-end">
+                <input id="txtFilter"
+                       type="text"
+                       class="form form-control"
+                       style="width:50%"
+                       name="p_Filter">
 
+                <input type="submit"
+                       value="Pesquisa"
+                       class="btn btn-light " />
+            </form>
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-12">
-
-            <table class="table text-center">
+        <div class="col-md-12 ">
+            <table class="table">
                 <tr>
                     <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                    <th></th>
                 </tr>
                 @foreach (var item in Model)
                 {
-                    <tr onclick="location.href = '@(Url.Action("DetalheContato", "Home", new { p_IdContato = item.Identificador }))'">
-                        <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                    <tr>
+                        <td onclick="location.href = '@(Url.Action("DetalheContato", "Home", new { p_IdContato = item.Identificador }))'">
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </td>
+                        <td>
+                            <input type="button"
+                                   value="Excluir"
+                                   class="btn btn-light"
+                                   onclick="location.href='@(Url.Action("ExcluirContato", "Home", new { p_IdContato = item.Identificador }))'" />
+                        </td>
                     </tr>
+
                 }
             </table>
         </div>
     </div>
+
+    @section scripts
+        {
+        <script>
+            $(document).ready(function () {
+                //$('input[type="text"]').change(function () {
+                //    console.log('hi');
+                //    // somethingChanged = true;
+                //});
+            });
+        </script>
+    }
 </div>

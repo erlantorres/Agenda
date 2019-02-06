@@ -4,72 +4,177 @@
     ViewData["Title"] = "AlterarContato";
 }
 
-<h1>Alterar Contato</h1>
+@functions
+{
+public void AddDadoAdicional(object p_Tipo, object p_Classificacao, object p_Valor)
+{
+    TipoDadoAdicional tipo = ViewBag.AgendaService.ObterTipoDadoAdcional(p_Tipo);
+    ClassificacaoDadoAdicional classificacao = ViewBag.AgendaService.ObterClassificacaoDado(p_Classificacao);
+    DadoAdicional dado = new DadoAdicional
+    {
+        TipoDado = tipo,
+        ClassificacaoDado = classificacao,
+        Valor = p_Valor as string
+    };
 
-<h4>Contato</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AlterarContato">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Identificador" class="control-label"></label>
-                <input asp-for="Identificador" class="form-control" />
-                <span asp-validation-for="Identificador" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Empresa" class="control-label"></label>
-                <input asp-for="Empresa" class="form-control" />
-                <span asp-validation-for="Empresa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cep" class="control-label"></label>
-                <input asp-for="Cep" class="form-control" />
-                <span asp-validation-for="Cep" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Logradouro" class="control-label"></label>
-                <input asp-for="Logradouro" class="form-control" />
-                <span asp-validation-for="Logradouro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Numero" class="control-label"></label>
-                <input asp-for="Numero" class="form-control" />
-                <span asp-validation-for="Numero" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Complemento" class="control-label"></label>
-                <input asp-for="Complemento" class="form-control" />
-                <span asp-validation-for="Complemento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Bairro" class="control-label"></label>
-                <input asp-for="Bairro" class="form-control" />
-                <span asp-validation-for="Bairro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cidade" class="control-label"></label>
-                <input asp-for="Cidade" class="form-control" />
-                <span asp-validation-for="Cidade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Uf" class="control-label"></label>
-                <input asp-for="Uf" class="form-control" />
-                <span asp-validation-for="Uf" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary"  />
-            </div>
-        </form>
+    Model.DadosAdicionais.Add(dado);
+}
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-12 text-center">
+        <h2 class="display-4">Alterar Contato</h2>
     </div>
 </div>
 
-<div>
-    @Html.ActionLink("Voltar", "DetalheContato", "Home", new { p_IdContato = Model.Identificador })
-</div>
+<form asp-action="AlterarContato">
+    <hr />
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @*<div class="form-group">
+                <label asp-for="Identificador" class="control-label"></label>
+                <input asp-for="Identificador" class="form-control" />
+                <span asp-validation-for="Identificador" class="text-danger"></span>
+            </div>*@
+    </div>
+    <div class="row">
+        <div class="form-group col-12 col-md-6">
+            <label asp-for="Nome" class="control-label font-weight-bold"></label>
+            <input asp-for="Nome" class="form-control" required />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+        <div class="form-group col-12 col-md-6">
+            <label asp-for="Empresa" class="control-label font-weight-bold"></label>
+            <input asp-for="Empresa" class="form-control" />
+            <span asp-validation-for="Empresa" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12 col-md-2">
+            <label asp-for="Cep" class="control-label font-weight-bold"></label>
+            <input asp-for="Cep" class="form-control" />
+            <span asp-validation-for="Cep" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12 col-md-6">
+            <label asp-for="Logradouro" class="control-label font-weight-bold"></label>
+            <input asp-for="Logradouro" class="form-control" />
+            <span asp-validation-for="Logradouro" class="text-danger"></span>
+        </div>
+        <div class="form-group col-12 col-md-2">
+            <label asp-for="Numero" class="control-label font-weight-bold"></label>
+            <input asp-for="Numero" class="form-control" />
+            <span asp-validation-for="Numero" class="text-danger"></span>
+        </div>
+        <div class="form-group col-12 col-md-4">
+            <label asp-for="Complemento" class="control-label font-weight-bold"></label>
+            <input asp-for="Complemento" class="form-control" />
+            <span asp-validation-for="Complemento" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12 col-md-4">
+            <label asp-for="Bairro" class="control-label font-weight-bold"></label>
+            <input asp-for="Bairro" class="form-control" />
+            <span asp-validation-for="Bairro" class="text-danger"></span>
+        </div>
+        <div class="form-group col-12 col-md-4">
+            <label asp-for="Cidade" class="control-label font-weight-bold"></label>
+            <input asp-for="Cidade" class="form-control" />
+            <span asp-validation-for="Cidade" class="text-danger"></span>
+        </div>
+        <div class="form-group col-12 col-md-4">
+            <label asp-for="Uf" class="control-label font-weight-bold"></label>
+            <input asp-for="Uf" class="form-control" />
+            <span asp-validation-for="Uf" class="text-danger"></span>
+        </div>
+    </div>
+    <br />
 
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <label for="sctTipo">Tipo de Contato</label>
+            <select id="sctTipo" class="form-control">
+                <option value="TELEFONE">Telefone</option>
+                <option value="EMAIL">E-mail</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-3">
+            <label for="sctClassificacao">Classificação Contato</label>
+            <select id="sctClassificacao" class="form-control">
+                <option value="CASA">Casa</option>
+                <option value="TRABALHO">Trabalho</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-3">
+            <label for="txtValor">Valor</label>
+            <input type="text" id="txtValor" class="form-control" />
+        </div>
+        <div class="col-12 col-md-3">
+            <label for="btnInserirContato">&nbsp;</label>
+            <input type="button"
+                   id="btnInserirContato"
+                   class="btn form-control btn-light"
+                   value="Inserir Contato"
+                   onclick="InserirDadoAdicional()" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-12 col-md-12">
+            <table class="table">
+                <tr>
+                    <th>Tipo de Contato</th>
+                    <th>Classificação Contato</th>
+                    <th>Valor</th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.DadosAdicionais)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.TipoDado.Nome)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ClassificacaoDado.Nome)</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Valor)
+                        </td>
+                        <td>
+                            <input type="button"
+                                   value="Excluir"
+                                   class="btn btn-light"
+                                   onclick="location.href='@(Url.Action("ExcluirContato", "Home"))'" />
+                        </td>
+                    </tr>
+
+                }
+            </table>
+        </div>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="form-group col-12 col-md-2 offset-10">
+            <input type="submit" value="Salvar" class="btn btn-light" />
+            <input type="button"
+                   class="btn btn-light"
+                   value="Voltar"
+                   onclick="location.href='@(Url.Action("DetalheContato", "Home", new { p_IdContato = Model.Identificador }))'" />
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            InserirDadoAdicional()
+            {
+                var tipo = '';
+                var classificacao = '';
+                var valor = $('#txtValor').val();
+
+                @*@AddDadoAdicional(tipo, classificacao, valor);*@
+            }
+        });
+    </script>
+}
