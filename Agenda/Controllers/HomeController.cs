@@ -1,5 +1,6 @@
 ﻿using Agenda.Models;
 using Agenda.Models.DTO;
+using Agenda.Regra;
 using Agenda.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

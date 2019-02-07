@@ -1,5 +1,8 @@
 ﻿using Agenda.Models;
 using Agenda.Models.DTO;
+using Agenda.Models.NHibernate;
+using Agenda.Regra;
+using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +10,14 @@ using System.Text.RegularExpressions;
 
 namespace Agenda.Services
 {
-    public class AgendaService : IAgendaService
+    public class AgendaService : IAgendaService, IDisposable
     {
+        private ISessionFactory _sessionFactory = null;
         private List<Contato> _contatos;
         public AgendaService()
         {
+            _sessionFactory = SessionFactoryBuilder.BuildSessionFactory();
+
             _contatos = new List<Contato>()
             {
                 new Contato { Identificador = 1, Nome = "Erlan Torres de Aguiar", Empresa = "Erlan Ltda", Cep = "06020194",
@@ -21,26 +27,26 @@ namespace Agenda.Services
                     {
                         new DadoAdicional
                         {
-                            TipoDado = new TipoDadoAdicional { Sigla = "TELEFONE", Nome = "Telefone" },
-                            ClassificacaoDado = new ClassificacaoDadoAdicional { Sigla = "CASA", Nome = "Casa" },
+                            TipoDado = new TipoDadoAdicional { SiglaTipo = "TELEFONE", Nome = "Telefone" },
+                            ClassificacaoDado = new ClassificacaoDadoAdicional { SiglaClassificacao = "CASA", Nome = "Casa" },
                             Valor = "11954203111"
                         },
                         new DadoAdicional
                         {
-                            TipoDado = new TipoDadoAdicional { Sigla = "TELEFONE", Nome = "Telefone" },
-                            ClassificacaoDado = new ClassificacaoDadoAdicional { Sigla = "TRABALHO", Nome = "Trabalho" },
+                            TipoDado = new TipoDadoAdicional { SiglaTipo = "TELEFONE", Nome = "Telefone" },
+                            ClassificacaoDado = new ClassificacaoDadoAdicional { SiglaClassificacao = "TRABALHO", Nome = "Trabalho" },
                             Valor = "11954203111"
                         },
                         new DadoAdicional
                         {
-                            TipoDado = new TipoDadoAdicional { Sigla = "EMAIL", Nome = "E-mail" },
-                            ClassificacaoDado = new ClassificacaoDadoAdicional { Sigla = "CASA", Nome = "Casa" },
+                            TipoDado = new TipoDadoAdicional { SiglaTipo = "EMAIL", Nome = "E-mail" },
+                            ClassificacaoDado = new ClassificacaoDadoAdicional { SiglaClassificacao = "CASA", Nome = "Casa" },
                             Valor = "erlantorres@hotmail.com"
                         },
                         new DadoAdicional
                         {
-                            TipoDado = new TipoDadoAdicional { Sigla = "TELEFONE", Nome = "Telefone" },
-                            ClassificacaoDado = new ClassificacaoDadoAdicional { Sigla = "TRABALHO", Nome = "Trabalho" },
+                            TipoDado = new TipoDadoAdicional { SiglaTipo = "TELEFONE", Nome = "Telefone" },
+                            ClassificacaoDado = new ClassificacaoDadoAdicional { SiglaClassificacao = "TRABALHO", Nome = "Trabalho" },
                             Valor = "1197889888"
                         }
                     }
@@ -52,14 +58,14 @@ namespace Agenda.Services
                     {
                         new DadoAdicional
                         {
-                            TipoDado = new TipoDadoAdicional { Sigla = "TELEFONE", Nome = "Telefone" },
-                            ClassificacaoDado = new ClassificacaoDadoAdicional { Sigla = "TRABALHO", Nome = "Trabalho" },
+                            TipoDado = new TipoDadoAdicional { SiglaTipo = "TELEFONE", Nome = "Telefone" },
+                            ClassificacaoDado = new ClassificacaoDadoAdicional { SiglaClassificacao = "TRABALHO", Nome = "Trabalho" },
                             Valor = "11954203111"
                         },
                         new DadoAdicional
                         {
-                            TipoDado = new TipoDadoAdicional { Sigla = "EMAIL", Nome = "E-mail" },
-                            ClassificacaoDado = new ClassificacaoDadoAdicional { Sigla = "CASA", Nome = "Casa" },
+                            TipoDado = new TipoDadoAdicional { SiglaTipo = "EMAIL", Nome = "E-mail" },
+                            ClassificacaoDado = new ClassificacaoDadoAdicional { SiglaClassificacao = "CASA", Nome = "Casa" },
                             Valor = "julia-peres@hotmail.com"
                         }
                     }
@@ -69,7 +75,20 @@ namespace Agenda.Services
 
         public List<Contato> ListarContatos(string p_Filter)
         {
-            return AplicarFiltro(p_Filter, _contatos).OrderBy(c => c.Nome).ToList();
+            List<Contato> contatos = new List<Contato>();
+            using (var session = _sessionFactory.OpenSession())
+            {
+                using (session.BeginTransaction())
+                {
+                    var lista = session.CreateCriteria(typeof(ContatoModel)).List<ContatoModel>();
+                    foreach (var contato in lista)
+                    {
+                        //contatos.Add(contato);
+                    }
+                }
+            }
+
+            return AplicarFiltro(p_Filter, contatos).OrderBy(c => c.Nome).ToList();
         }
 
         private List<Contato> AplicarFiltro(string p_Filter, List<Contato> contatos)
@@ -104,7 +123,19 @@ namespace Agenda.Services
 
         public Contato ObterContatoPorId(int p_IdContato)
         {
-            return _contatos.Where(c => c.Identificador == p_IdContato).OrderBy(c => c.DadosAdicionais.OrderBy(d => d.TipoDado.Sigla)).FirstOrDefault();
+            using (var session = _sessionFactory.OpenSession())
+            {
+                using (session.BeginTransaction())
+                {
+                    var ret = session.Get(typeof(ContatoModel), p_IdContato);
+                    if (ret == null)
+                    {
+
+                    }
+                }
+            }
+
+            return _contatos.Where(c => c.Identificador == p_IdContato).OrderBy(c => c.DadosAdicionais.OrderBy(d => d.TipoDado.SiglaTipo)).FirstOrDefault();
         }
 
         public RetornoTO IncluirContato(Contato p_Contato)
@@ -117,9 +148,14 @@ namespace Agenda.Services
                     return ret;
                 }
 
-                int idMax = _contatos.Max(c => c.Identificador);
-                p_Contato.Identificador = (idMax + 1);
-                _contatos.Add(p_Contato);
+                using (var session = _sessionFactory.OpenSession())
+                {
+                    using (var transacao = session.BeginTransaction())
+                    {
+                        session.Save(p_Contato);
+                        transacao.Commit();
+                    }
+                }
 
                 return new RetornoTO { Sucesso = true };
             }
@@ -160,7 +196,7 @@ namespace Agenda.Services
                 erros.Add("Telefone do contato é obrigatório!");
             }
 
-            DadoAdicional dado = p_Contato.DadosAdicionais.Where(d => "TELEFONE".Equals(d.TipoDado.Sigla)).FirstOrDefault();
+            DadoAdicional dado = p_Contato.DadosAdicionais.Where(d => "TELEFONE".Equals(d.TipoDado.SiglaTipo)).FirstOrDefault();
 
             if (dado == null || string.IsNullOrWhiteSpace(dado.Valor))
             {
@@ -170,14 +206,14 @@ namespace Agenda.Services
             {
                 foreach (var item in p_Contato.DadosAdicionais)
                 {
-                    if ("TELEFONE".Equals(item.TipoDado.Sigla))
+                    if ("TELEFONE".Equals(item.TipoDado.SiglaTipo))
                     {
                         if (!ValidarTelefone(item.Valor))
                         {
                             erros.Add("Telefone inválido!");
                         }
                     }
-                    else if ("EMAIL".Equals(item.TipoDado.Sigla))
+                    else if ("EMAIL".Equals(item.TipoDado.SiglaTipo))
                     {
                         if (!ValidarEmail(item.Valor))
                         {
@@ -224,8 +260,14 @@ namespace Agenda.Services
                     return new RetornoTO { Sucesso = false, Mensagem = "Contato não localizado!" };
                 }
 
-                _contatos.Remove(contato);
-                _contatos.Add(p_Contato);
+                using (var session = _sessionFactory.OpenSession())
+                {
+                    using (var transacao = session.BeginTransaction())
+                    {
+                        session.Update(p_Contato);
+                        transacao.Commit();
+                    }
+                }
 
                 return new RetornoTO { Sucesso = true };
             }
@@ -245,7 +287,14 @@ namespace Agenda.Services
                     return new RetornoTO { Sucesso = false, Mensagem = "Contato não localizado!" };
                 }
 
-                _contatos.Remove(contato);
+                using (var session = _sessionFactory.OpenSession())
+                {
+                    using (var transacao = session.BeginTransaction())
+                    {
+                        session.Delete(contato);
+                        transacao.Commit();
+                    }
+                }
 
                 return new RetornoTO { Sucesso = true };
             }
@@ -253,7 +302,6 @@ namespace Agenda.Services
             {
                 return new RetornoTO { Sucesso = false, Mensagem = ex.ToString() };
             }
-
         }
 
         public TipoDadoAdicional ObterTipoDadoAdcional(string p_Sigla)
@@ -264,10 +312,10 @@ namespace Agenda.Services
             }
 
             List<TipoDadoAdicional> tipos = new List<TipoDadoAdicional>();
-            tipos.Add(new TipoDadoAdicional { Sigla = "TELEFONE", Nome = "Telefone" });
-            tipos.Add(new TipoDadoAdicional { Sigla = "EMAIL", Nome = "E-mail" });
+            tipos.Add(new TipoDadoAdicional { SiglaTipo = "TELEFONE", Nome = "Telefone" });
+            tipos.Add(new TipoDadoAdicional { SiglaTipo = "EMAIL", Nome = "E-mail" });
 
-            return tipos.Where(t => p_Sigla.Equals(t.Sigla)).FirstOrDefault();
+            return tipos.Where(t => p_Sigla.Equals(t.SiglaTipo)).FirstOrDefault();
         }
 
         public ClassificacaoDadoAdicional ObterClassificacaoDado(string p_Sigla)
@@ -278,10 +326,19 @@ namespace Agenda.Services
             }
 
             List<ClassificacaoDadoAdicional> classificacao = new List<ClassificacaoDadoAdicional>();
-            classificacao.Add(new ClassificacaoDadoAdicional { Sigla = "CASA", Nome = "Casa" });
-            classificacao.Add(new ClassificacaoDadoAdicional { Sigla = "TRABALHO", Nome = "Trabalho" });
+            classificacao.Add(new ClassificacaoDadoAdicional { SiglaClassificacao = "CASA", Nome = "Casa" });
+            classificacao.Add(new ClassificacaoDadoAdicional { SiglaClassificacao = "TRABALHO", Nome = "Trabalho" });
 
-            return classificacao.Where(c => p_Sigla.Equals(c.Sigla)).FirstOrDefault();
+            return classificacao.Where(c => p_Sigla.Equals(c.SiglaClassificacao)).FirstOrDefault();
+        }
+
+        public void Dispose()
+        {
+            if (_sessionFactory != null)
+            {
+                _sessionFactory.Close();
+                _sessionFactory = null;
+            }
         }
     }
 }

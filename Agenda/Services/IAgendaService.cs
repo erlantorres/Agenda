@@ -1,5 +1,5 @@
-﻿using Agenda.Models;
-using Agenda.Models.DTO;
+﻿using Agenda.Models.DTO;
+using Agenda.Regra;
 using System.Collections.Generic;
 
 namespace Agenda.Services

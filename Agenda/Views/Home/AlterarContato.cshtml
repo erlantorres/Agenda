@@ -1,4 +1,4 @@
-﻿@model Agenda.Models.Contato
+﻿@model Agenda.Regra.Contato
 
 @{
     ViewData["Title"] = "AlterarContato";
@@ -6,19 +6,7 @@
 
 @functions
 {
-public void AddDadoAdicional(object p_Tipo, object p_Classificacao, object p_Valor)
-{
-    TipoDadoAdicional tipo = ViewBag.AgendaService.ObterTipoDadoAdcional(p_Tipo);
-    ClassificacaoDadoAdicional classificacao = ViewBag.AgendaService.ObterClassificacaoDado(p_Classificacao);
-    DadoAdicional dado = new DadoAdicional
-    {
-        TipoDado = tipo,
-        ClassificacaoDado = classificacao,
-        Valor = p_Valor as string
-    };
 
-    Model.DadosAdicionais.Add(dado);
-}
 }
 
 <div class="row justify-content-center">
